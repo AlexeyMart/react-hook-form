@@ -3,14 +3,35 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import "./YouTubeForm.css";
 
+interface FormValues {
+  username: string;
+  email: string;
+  channel: string;
+}
+
 export const YouTubeForm: FC = () => {
-  const form = useForm();
-  const { register, control } = form;
+  const form = useForm<FormValues>();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { isSubmitting, isDirty },
+  } = form;
   // const { name, ref, onChange, onBlur } = register("username");
+
+  const onSubmit = async (data: FormValues) => {
+    console.log("data :>> ", data);
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1500);
+    });
+  };
 
   return (
     <>
-      <form className="YoutubeForm">
+      <form className="YoutubeForm" onSubmit={handleSubmit(onSubmit)}>
         <label>
           <p>Username</p>
           <input
@@ -34,7 +55,9 @@ export const YouTubeForm: FC = () => {
           <input type="text" id="channel" {...register("channel")} />
         </label>
 
-        <button>Submit</button>
+        <button disabled={isSubmitting || !isDirty} type="submit">
+          Submit
+        </button>
       </form>
 
       <DevTool control={control} />

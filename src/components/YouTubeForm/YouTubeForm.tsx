@@ -12,35 +12,25 @@ import "./YouTubeForm.css";
 // Types
 import { YouTubeFormValues } from "./YoutubeForm.types";
 
+// Helpers
+import {
+  customValidationEmailFn,
+  onSubmit,
+  getDefaultValues,
+} from "./YoutubeForm.helpers";
+
 // Constants
-import { EMAIL_FIELD_ADMIN_ERROR } from "./YoutubeForm.constants";
+import { defaultValues } from "./YoutubeForm.constants";
 
 export const YouTubeForm: FC = () => {
-  const form = useForm<YouTubeFormValues>();
+  const form = useForm<YouTubeFormValues>({
+    defaultValues,
+    // ALSO able to fetch some data and init defaultValues
+    // defaultValues: getDefaultValues,
+  });
 
   const { control, handleSubmit, formState } = form;
   const { isSubmitting, isDirty } = formState;
-
-  const onSubmit = async (data: YouTubeFormValues) => {
-    console.log("data :>> ", data);
-
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, 1500);
-    });
-  };
-
-  const customValidationEmailFn = (
-    fieldValue: string,
-    formValues: YouTubeFormValues
-  ) => {
-    if (fieldValue === "admin@example.com" || formValues.username === "Admin") {
-      return EMAIL_FIELD_ADMIN_ERROR;
-    }
-
-    return true;
-  };
 
   return (
     <FormProvider {...form}>

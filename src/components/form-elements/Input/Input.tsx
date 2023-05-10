@@ -5,21 +5,24 @@ import {
   REQUIRED_FIELD_ERROR,
   emailRegExp,
 } from "../../YouTubeForm/YoutubeForm.constants";
+import { YouTubeFormValues } from "../../YouTubeForm/YoutubeForm.types";
 
 interface Props extends ComponentProps<"input"> {
-  name: string;
+  name: keyof YouTubeFormValues;
   label: string;
   isRequired?: boolean;
+  validate?: (fieldValue: string, formValues: YouTubeFormValues) => any;
 }
 
 export const Input: FC<Props> = ({
   name,
   label,
+  validate,
   type = "text",
   isRequired = false,
 }) => {
-  const { register, formState } = useFormContext();
-  // const { name, ref, onChange, onBlur } = register("username");
+  const { register, formState } = useFormContext<YouTubeFormValues>();
+  // const { name, ref, onChange, onBlur } = register(name);
 
   const { errors } = formState;
   const isError = !!errors[name];
@@ -34,6 +37,7 @@ export const Input: FC<Props> = ({
           // ref={ref}
           // onChange={onChange}
           // onBlur={onBlur}
+
           type={type}
           {...register(name, {
             required: {
@@ -48,6 +52,17 @@ export const Input: FC<Props> = ({
                   },
                 }
               : {}),
+            validate,
+
+            // ALSO POSSIBLE PASS SEVERAL FUNCTIONS. TYPES WILL BE INFERED
+            // validate: {
+            //   notAdmin: (fieldValue, formValues) => {
+            //     return true;
+            //   },
+            //   notBlackListed: (fieldValue, formValues) => {
+            //     return true;
+            //   },
+            // },
           })}
         />
       </label>

@@ -12,6 +12,9 @@ import "./YouTubeForm.css";
 // Types
 import { YouTubeFormValues } from "./YoutubeForm.types";
 
+// Constants
+import { EMAIL_FIELD_ADMIN_ERROR } from "./YoutubeForm.constants";
+
 export const YouTubeForm: FC = () => {
   const form = useForm<YouTubeFormValues>();
 
@@ -28,6 +31,17 @@ export const YouTubeForm: FC = () => {
     });
   };
 
+  const customValidationEmailFn = (
+    fieldValue: string,
+    formValues: YouTubeFormValues
+  ) => {
+    if (fieldValue === "admin@example.com" || formValues.username === "Admin") {
+      return EMAIL_FIELD_ADMIN_ERROR;
+    }
+
+    return true;
+  };
+
   return (
     <FormProvider {...form}>
       <form
@@ -37,7 +51,13 @@ export const YouTubeForm: FC = () => {
       >
         <Input name="username" label="Username" isRequired />
 
-        <Input name="email" label="Email" isRequired type="email" />
+        <Input
+          name="email"
+          label="Email"
+          isRequired
+          type="email"
+          validate={customValidationEmailFn}
+        />
 
         <Input name="channel" label="Channel" isRequired />
 

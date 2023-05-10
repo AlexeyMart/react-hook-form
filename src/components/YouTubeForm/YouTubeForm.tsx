@@ -17,6 +17,7 @@ import {
   customValidationEmailFn,
   onSubmit,
   getDefaultValues,
+  validateSocial,
 } from "./YoutubeForm.helpers";
 
 // Constants
@@ -50,6 +51,18 @@ export const YouTubeForm: FC = () => {
         />
 
         <Input name="channel" label="Channel" isRequired />
+
+        <Input
+          name="social.facebook"
+          label="Facebook"
+          validate={validateSocial}
+        />
+
+        <Input
+          name="social.twitter"
+          label="Twitter"
+          validate={validateSocial}
+        />
 
         <button disabled={isSubmitting || !isDirty} type="submit">
           Submit

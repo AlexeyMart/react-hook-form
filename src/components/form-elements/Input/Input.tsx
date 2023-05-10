@@ -5,13 +5,13 @@ import {
   REQUIRED_FIELD_ERROR,
   emailRegExp,
 } from "../../YouTubeForm/YoutubeForm.constants";
-import { YouTubeFormValues } from "../../YouTubeForm/YoutubeForm.types";
+import { get } from "../../YouTubeForm/YoutubeForm.helpers";
 
 interface Props extends ComponentProps<"input"> {
-  name: keyof YouTubeFormValues;
+  name: string;
   label: string;
   isRequired?: boolean;
-  validate?: (fieldValue: string, formValues: YouTubeFormValues) => any;
+  validate?: (fieldValue: string, formValues: Record<string, any>) => any;
 }
 
 export const Input: FC<Props> = ({
@@ -21,12 +21,11 @@ export const Input: FC<Props> = ({
   type = "text",
   isRequired = false,
 }) => {
-  const { register, formState } = useFormContext<YouTubeFormValues>();
+  const { register, formState } = useFormContext<Record<string, any>>();
   // const { name, ref, onChange, onBlur } = register(name);
 
   const { errors } = formState;
-  const isError = !!errors[name];
-  const errorMessage = isError && errors[name]?.message;
+  const errorMessage = get(errors, name)?.message;
 
   return (
     <div className="form-control">
@@ -67,7 +66,7 @@ export const Input: FC<Props> = ({
         />
       </label>
 
-      {isError && typeof errorMessage === "string" && (
+      {errorMessage && typeof errorMessage === "string" && (
         <p className="error">{errorMessage}</p>
       )}
     </div>

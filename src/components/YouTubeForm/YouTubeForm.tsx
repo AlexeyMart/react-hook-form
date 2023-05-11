@@ -31,18 +31,19 @@ export const YouTubeForm: FC = () => {
     // defaultValues: getDefaultValues,
   });
 
-  const { control, handleSubmit, formState, watch } = form;
+  const { control, handleSubmit, formState, watch, getValues, setValue } = form;
 
-  // пример для трекинга значений формы
+  // example how to track and manipulate form values
   useEffect(() => {
-    const subscription = watch((value) => {
-      console.log(value);
+    const subscription = watch((formValues) => {
+      console.log("formValues :>> ", formValues);
+      // possible to use setValue method
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [watch]);
+  }, [watch, setValue]);
 
   const {
     fields: petFields,
@@ -53,10 +54,30 @@ export const YouTubeForm: FC = () => {
     name: "pets",
   });
 
+  const handleGetValues = () => {
+    const formValues = getValues();
+    console.log("formValues", formValues);
+    // also possible get field value
+    const socialValue = getValues("social");
+    console.log("socialValue :>> ", socialValue);
+    // and several fields values
+    const [username, email] = getValues(["username", "email"]);
+    console.log("username, email :>> ", username, email);
+  };
+
+  const handleSetValue = () => {
+    setValue("username", "Superman", {
+      // for imitate user action
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
   const { isSubmitting, isDirty } = formState;
 
-  // const watchFormValues = watch();  for all form values
-  const watchUserName = watch("username");
+  // const watchFormValues = watch(); // for all form values, always trigger rerender
+  const watchUserName = watch("username"); // trigger rerender always on username changes
 
   return (
     <FormProvider {...form}>
@@ -108,6 +129,14 @@ export const YouTubeForm: FC = () => {
           className="YoutubeForm__submit-button"
         >
           Submit
+        </button>
+
+        <button onClick={handleGetValues} type="button">
+          Get Values
+        </button>
+
+        <button onClick={handleSetValue} type="button">
+          Set Value
         </button>
       </form>
 

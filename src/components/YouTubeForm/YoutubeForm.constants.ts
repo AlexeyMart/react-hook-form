@@ -13,11 +13,13 @@ export const emailRegExp =
 
 export const defaultValues: YouTubeFormValues = {
   username: "Batman",
-  email: "",
-  channel: "",
+  email: "example@example.com",
+  channel: "Some Channel",
   social: {
     facebook: "",
     twitter: "",
   },
   pets: [{ kind: "", name: "" }],
+  age: 0,
+  dob: new Date(),
 };

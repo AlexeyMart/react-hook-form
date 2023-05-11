@@ -1,5 +1,5 @@
 import { FC, ComponentProps } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, RegisterOptions } from "react-hook-form";
 import {
   EMAIL_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
@@ -27,6 +27,35 @@ export const Input: FC<Props> = ({
   const { errors } = formState;
   const errorMessage = getByPathInObj(errors, name)?.message;
 
+  const registerOptions = {
+    required: {
+      value: isRequired,
+      message: REQUIRED_FIELD_ERROR,
+    },
+
+    ...(type === "email"
+      ? {
+          pattern: {
+            value: emailRegExp,
+            message: EMAIL_FIELD_ERROR,
+          },
+        }
+      : {}),
+    ...(type === "number" ? { valueAsNumber: true } : {}),
+    ...(type === "date" ? { valueAsDate: true } : {}),
+
+    validate,
+    // ALSO POSSIBLE PASS SEVERAL FUNCTIONS. TYPES WILL BE INFERED
+    // validate: {
+    //   notAdmin: (fieldValue, formValues) => {
+    //     return true;
+    //   },
+    //   notBlackListed: (fieldValue, formValues) => {
+    //     return true;
+    //   },
+    // },
+  };
+
   return (
     <div className="form-control">
       <label>
@@ -38,31 +67,7 @@ export const Input: FC<Props> = ({
           // onBlur={onBlur}
 
           type={type}
-          {...register(name, {
-            required: {
-              value: isRequired,
-              message: REQUIRED_FIELD_ERROR,
-            },
-            ...(type === "email"
-              ? {
-                  pattern: {
-                    value: emailRegExp,
-                    message: EMAIL_FIELD_ERROR,
-                  },
-                }
-              : {}),
-            validate,
-
-            // ALSO POSSIBLE PASS SEVERAL FUNCTIONS. TYPES WILL BE INFERED
-            // validate: {
-            //   notAdmin: (fieldValue, formValues) => {
-            //     return true;
-            //   },
-            //   notBlackListed: (fieldValue, formValues) => {
-            //     return true;
-            //   },
-            // },
-          })}
+          {...register(name, registerOptions as RegisterOptions)}
         />
       </label>
 

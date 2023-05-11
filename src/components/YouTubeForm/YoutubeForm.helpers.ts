@@ -2,8 +2,9 @@ import {
   defaultValues,
   EMAIL_FIELD_ADMIN_ERROR,
   SOCIAL_FIELD_ERROR,
+  REQUIRED_FIELD_ERROR,
 } from "./YoutubeForm.constants";
-import { YouTubeFormValues } from "./YoutubeForm.types";
+import { Pet, YouTubeFormValues } from "./YoutubeForm.types";
 
 export const onSubmit = async (data: YouTubeFormValues) => {
   console.log("data :>> ", data);
@@ -49,3 +50,23 @@ export const validateSocial = (
 
 export const getByPathInObj = (obj: Record<string, any>, path: string) =>
   path.split(".").reduce((acc, item) => acc?.[item], obj);
+
+export const validatePetField =
+  (type: keyof Pet, index: number) =>
+  (_fieldValue: string, formValues: Record<string, any>) => {
+    const { kind, name } = formValues.pets[index];
+
+    if (type === "kind") {
+      if (!kind && name) {
+        return REQUIRED_FIELD_ERROR;
+      }
+    }
+
+    if (type == "name") {
+      if (!name && kind) {
+        return REQUIRED_FIELD_ERROR;
+      }
+    }
+
+    return true;
+  };

@@ -1,4 +1,4 @@
-interface Pet {
+export interface Pet {
   name: string;
   kind: string;
 }
@@ -16,4 +16,6 @@ export interface YouTubeFormValues {
     twitter: string;
   };
   pets: Pet[];
+  age: number;
+  dob: Date;
 }

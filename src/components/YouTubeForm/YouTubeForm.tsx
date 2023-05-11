@@ -18,6 +18,7 @@ import {
   onSubmit,
   getDefaultValues,
   validateSocial,
+  validatePetField,
 } from "./YoutubeForm.helpers";
 
 // Constants
@@ -56,13 +57,13 @@ export const YouTubeForm: FC = () => {
           <Input
             name={`pets.${index}.kind`}
             label={`Pet ${index + 1} kind`}
-            isRequired
+            validate={validatePetField("kind", index)}
           />
 
           <Input
             name={`pets.${index}.name`}
             label={`Pet ${index + 1} name`}
-            isRequired
+            validate={validatePetField("name", index)}
           />
         </div>
 
@@ -115,6 +116,10 @@ export const YouTubeForm: FC = () => {
         />
 
         {petFields.map(renderPetField)}
+
+        <Input name="age" label="Age" type="number" isRequired />
+
+        <Input name="dob" label="DOB" type="date" />
 
         <button
           disabled={isSubmitting || !isDirty}

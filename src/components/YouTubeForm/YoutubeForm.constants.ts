@@ -19,4 +19,5 @@ export const defaultValues: YouTubeFormValues = {
     facebook: "",
     twitter: "",
   },
+  pets: [{ kind: "", name: "" }],
 };

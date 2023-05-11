@@ -3,3 +3,18 @@
   flex-direction: column;
   align-items: center;
 }
+
+.YoutubeForm__pets {
+  display: flex;
+  column-gap: 20px;
+}
+
+.YoutubeForm__pets-buttons {
+  display: flex;
+  column-gap: 20px;
+  justify-content: center;
+}
+
+.YoutubeForm__submit-button {
+  margin-top: 50px;
+}

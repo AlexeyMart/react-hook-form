@@ -47,5 +47,5 @@ export const validateSocial = (
   return SOCIAL_FIELD_ERROR;
 };
 
-export const get = (obj: Record<string, any>, path: string) =>
+export const getByPathInObj = (obj: Record<string, any>, path: string) =>
   path.split(".").reduce((acc, item) => acc?.[item], obj);

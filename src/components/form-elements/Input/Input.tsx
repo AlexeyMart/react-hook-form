@@ -5,7 +5,7 @@ import {
   REQUIRED_FIELD_ERROR,
   emailRegExp,
 } from "../../YouTubeForm/YoutubeForm.constants";
-import { get } from "../../YouTubeForm/YoutubeForm.helpers";
+import { getByPathInObj } from "../../YouTubeForm/YoutubeForm.helpers";
 
 interface Props extends ComponentProps<"input"> {
   name: string;
@@ -25,7 +25,7 @@ export const Input: FC<Props> = ({
   // const { name, ref, onChange, onBlur } = register(name);
 
   const { errors } = formState;
-  const errorMessage = get(errors, name)?.message;
+  const errorMessage = getByPathInObj(errors, name)?.message;
 
   return (
     <div className="form-control">

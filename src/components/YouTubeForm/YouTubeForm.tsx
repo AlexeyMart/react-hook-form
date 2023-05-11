@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 // Components
@@ -10,7 +10,7 @@ import { Input } from "../form-elements/Input/Input";
 import "./YouTubeForm.css";
 
 // Types
-import { YouTubeFormValues } from "./YoutubeForm.types";
+import { YouTubeFormValues, PetWithId } from "./YoutubeForm.types";
 
 // Helpers
 import {
@@ -31,6 +31,56 @@ export const YouTubeForm: FC = () => {
   });
 
   const { control, handleSubmit, formState } = form;
+
+  const {
+    fields: petFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control,
+    name: "pets",
+  });
+
+  const renderPetField = (
+    // id автоматически генерируется react-hook-form
+    { id, kind, name }: PetWithId,
+    index: number,
+    arr: PetWithId[]
+  ) => {
+    const handleRemovePhoneField = () => remove(index);
+    const handleAddPhoneField = () => append({ kind: "", name: "" });
+
+    return (
+      <div key={id}>
+        <div className="YoutubeForm__pets">
+          <Input
+            name={`pets.${index}.kind`}
+            label={`Pet ${index + 1} kind`}
+            isRequired
+          />
+
+          <Input
+            name={`pets.${index}.name`}
+            label={`Pet ${index + 1} name`}
+            isRequired
+          />
+        </div>
+
+        <div className="YoutubeForm__pets-buttons">
+          {arr.length !== 1 && (
+            <button type="button" onClick={handleRemovePhoneField}>
+              Remove pet
+            </button>
+          )}
+
+          <button type="button" onClick={handleAddPhoneField}>
+            Add pet
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const { isSubmitting, isDirty } = formState;
 
   return (
@@ -64,7 +114,13 @@ export const YouTubeForm: FC = () => {
           validate={validateSocial}
         />
 
-        <button disabled={isSubmitting || !isDirty} type="submit">
+        {petFields.map(renderPetField)}
+
+        <button
+          disabled={isSubmitting || !isDirty}
+          type="submit"
+          className="YoutubeForm__submit-button"
+        >
           Submit
         </button>
       </form>

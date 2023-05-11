@@ -1,3 +1,12 @@
+interface Pet {
+  name: string;
+  kind: string;
+}
+
+export interface PetWithId extends Pet {
+  id: string;
+}
+
 export interface YouTubeFormValues {
   username: string;
   email: string;
@@ -6,4 +15,5 @@ export interface YouTubeFormValues {
     facebook: string;
     twitter: string;
   };
+  pets: Pet[];
 }

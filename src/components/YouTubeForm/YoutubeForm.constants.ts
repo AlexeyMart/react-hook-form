@@ -16,7 +16,7 @@ export const defaultValues: YouTubeFormValues = {
   email: "example@example.com",
   channel: "Some Channel",
   social: {
-    facebook: "",
+    facebook: "fb",
     twitter: "",
   },
   pets: [{ kind: "", name: "" }],

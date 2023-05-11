@@ -20,6 +20,7 @@ export const Input: FC<Props> = ({
   validate,
   type = "text",
   isRequired = false,
+  ...rest
 }) => {
   const { register, formState } = useFormContext<Record<string, any>>();
   // const { name, ref, onChange, onBlur } = register(name);
@@ -68,6 +69,7 @@ export const Input: FC<Props> = ({
 
           type={type}
           {...register(name, registerOptions as RegisterOptions)}
+          {...rest}
         />
       </label>
 

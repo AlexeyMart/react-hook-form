@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
@@ -10,7 +10,7 @@ import { Input } from "../form-elements/Input/Input";
 import "./YouTubeForm.css";
 
 // Types
-import { YouTubeFormValues, PetWithId } from "./YoutubeForm.types";
+import { YouTubeFormValues } from "./YoutubeForm.types";
 
 // Helpers
 import {
@@ -18,7 +18,7 @@ import {
   onSubmit,
   getDefaultValues,
   validateSocial,
-  validatePetField,
+  renderPetField,
 } from "./YoutubeForm.helpers";
 
 // Constants
@@ -31,7 +31,18 @@ export const YouTubeForm: FC = () => {
     // defaultValues: getDefaultValues,
   });
 
-  const { control, handleSubmit, formState } = form;
+  const { control, handleSubmit, formState, watch } = form;
+
+  // пример для трекинга значений формы
+  useEffect(() => {
+    const subscription = watch((value) => {
+      console.log(value);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 
   const {
     fields: petFields,
@@ -42,47 +53,10 @@ export const YouTubeForm: FC = () => {
     name: "pets",
   });
 
-  const renderPetField = (
-    // id автоматически генерируется react-hook-form
-    { id, kind, name }: PetWithId,
-    index: number,
-    arr: PetWithId[]
-  ) => {
-    const handleRemovePhoneField = () => remove(index);
-    const handleAddPhoneField = () => append({ kind: "", name: "" });
-
-    return (
-      <div key={id}>
-        <div className="YoutubeForm__pets">
-          <Input
-            name={`pets.${index}.kind`}
-            label={`Pet ${index + 1} kind`}
-            validate={validatePetField("kind", index)}
-          />
-
-          <Input
-            name={`pets.${index}.name`}
-            label={`Pet ${index + 1} name`}
-            validate={validatePetField("name", index)}
-          />
-        </div>
-
-        <div className="YoutubeForm__pets-buttons">
-          {arr.length !== 1 && (
-            <button type="button" onClick={handleRemovePhoneField}>
-              Remove pet
-            </button>
-          )}
-
-          <button type="button" onClick={handleAddPhoneField}>
-            Add pet
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   const { isSubmitting, isDirty } = formState;
+
+  // const watchFormValues = watch();  for all form values
+  const watchUserName = watch("username");
 
   return (
     <FormProvider {...form}>
@@ -91,7 +65,14 @@ export const YouTubeForm: FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <Input name="username" label="Username" isRequired />
+        <h2>WatchedUserName: {watchUserName}</h2>
+
+        <Input
+          name="username"
+          label="Username"
+          isRequired
+          style={{ color: watchUserName === "Batman" ? "#315efb" : "black" }}
+        />
 
         <Input
           name="email"
@@ -115,7 +96,7 @@ export const YouTubeForm: FC = () => {
           validate={validateSocial}
         />
 
-        {petFields.map(renderPetField)}
+        {petFields.map(renderPetField(append, remove))}
 
         <Input name="age" label="Age" type="number" isRequired />
 

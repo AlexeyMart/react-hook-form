@@ -9,7 +9,7 @@ import {
 import { Pet, PetWithId, YouTubeFormValues } from "./YoutubeForm.types";
 
 export const onSubmit = async (data: YouTubeFormValues) => {
-  console.log("data :>> ", data);
+  console.log("submitting :>> ", data);
 
   await new Promise((resolve) => {
     setTimeout(() => {

@@ -36,7 +36,7 @@ export const YouTubeForm: FC = () => {
   // example how to track and manipulate form values
   useEffect(() => {
     const subscription = watch((formValues) => {
-      console.log("formValues :>> ", formValues);
+      // console.log("formValues :>> ", formValues);
       // possible to use setValue method
     });
 
@@ -93,6 +93,7 @@ export const YouTubeForm: FC = () => {
           label="Username"
           isRequired
           style={{ color: watchUserName === "Batman" ? "#315efb" : "black" }}
+          disabled
         />
 
         <Input
@@ -115,6 +116,7 @@ export const YouTubeForm: FC = () => {
           name="social.twitter"
           label="Twitter"
           validate={validateSocial}
+          disabled={watch("social.facebook") !== ""}
         />
 
         {petFields.map(renderPetField(append, remove))}

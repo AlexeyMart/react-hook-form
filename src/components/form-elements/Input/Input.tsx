@@ -20,6 +20,7 @@ export const Input: FC<Props> = ({
   validate,
   type = "text",
   isRequired = false,
+  disabled,
   ...rest
 }) => {
   const { register, formState } = useFormContext<Record<string, any>>();
@@ -55,6 +56,9 @@ export const Input: FC<Props> = ({
     //     return true;
     //   },
     // },
+
+    // disabled
+    // in register disabled: true option prevent validation and set field value to undefined in case of submit
   };
 
   return (
@@ -68,6 +72,7 @@ export const Input: FC<Props> = ({
           // onBlur={onBlur}
 
           type={type}
+          disabled={disabled}
           {...register(name, registerOptions as RegisterOptions)}
           {...rest}
         />

@@ -33,7 +33,17 @@ export const YouTubeForm: FC = () => {
     // defaultValues: getDefaultValues,
   });
 
-  const { control, handleSubmit, formState, watch, getValues, setValue } = form;
+  const {
+    control,
+    handleSubmit,
+    formState,
+    watch,
+    getValues,
+    setValue,
+    reset,
+  } = form;
+
+  const { isSubmitting, isDirty, isSubmitSuccessful } = formState;
 
   // example how to track and manipulate form values
   useEffect(() => {
@@ -46,6 +56,13 @@ export const YouTubeForm: FC = () => {
       subscription.unsubscribe();
     };
   }, [watch, setValue]);
+
+  // reset form after successful submit (this is recommended way, not in onSubmit fn)
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
 
   const {
     fields: petFields,
@@ -75,8 +92,6 @@ export const YouTubeForm: FC = () => {
       shouldValidate: true,
     });
   };
-
-  const { isSubmitting, isDirty } = formState;
 
   // const watchFormValues = watch(); // for all form values, always trigger rerender
   const watchUserName = watch("username"); // trigger rerender always on username changes
@@ -141,6 +156,10 @@ export const YouTubeForm: FC = () => {
 
         <button onClick={handleSetValue} type="button">
           Set Value
+        </button>
+
+        <button onClick={() => reset()} type="button">
+          Reset form
         </button>
       </form>
 

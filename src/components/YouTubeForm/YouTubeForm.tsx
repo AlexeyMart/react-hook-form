@@ -19,6 +19,7 @@ import {
   getDefaultValues,
   validateSocial,
   renderPetField,
+  onSubmitError,
 } from "./YoutubeForm.helpers";
 
 // Constants
@@ -83,7 +84,7 @@ export const YouTubeForm: FC = () => {
     <FormProvider {...form}>
       <form
         className="YoutubeForm"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, onSubmitError)}
         noValidate
       >
         <h2>WatchedUserName: {watchUserName}</h2>

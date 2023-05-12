@@ -1,4 +1,9 @@
-import { UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form";
+import {
+  FieldErrors,
+  SubmitErrorHandler,
+  UseFieldArrayAppend,
+  UseFieldArrayRemove,
+} from "react-hook-form";
 import { Input } from "../form-elements/Input/Input";
 import {
   defaultValues,
@@ -16,6 +21,13 @@ export const onSubmit = async (data: YouTubeFormValues) => {
       resolve(true);
     }, 1500);
   });
+};
+
+// executing in case of validation errors
+export const onSubmitError: SubmitErrorHandler<YouTubeFormValues> = (
+  errors: FieldErrors<YouTubeFormValues>
+) => {
+  console.log("errors :>> ", errors);
 };
 
 export const customValidationEmailFn = (

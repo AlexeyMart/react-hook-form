@@ -18,4 +18,5 @@ export interface YouTubeFormValues {
   pets: Pet[];
   age: number;
   dob: Date;
+  account: string;
 }

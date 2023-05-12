@@ -10,6 +10,7 @@ import {
   EMAIL_FIELD_ADMIN_ERROR,
   SOCIAL_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
+  ACCOUNT_FIELD_EXISTING_ERROR,
 } from "./YoutubeForm.constants";
 import { Pet, PetWithId, YouTubeFormValues } from "./YoutubeForm.types";
 
@@ -65,7 +66,7 @@ export const validateSocial = (
 export const getByPathInObj = (obj: Record<string, any>, path: string) =>
   path.split(".").reduce((acc, item) => acc?.[item], obj);
 
-export const validatePetField =
+const validatePetField =
   (type: keyof Pet, index: number) =>
   (_fieldValue: string, formValues: Record<string, any>) => {
     const { kind, name } = formValues.pets[index];
@@ -125,3 +126,23 @@ export const renderPetField =
       </div>
     );
   };
+
+export const validateAccount = async (fieldValue: string) => {
+  console.log("fieldValue :>> ", fieldValue);
+
+  const check = await new Promise((resolve) => {
+    setTimeout(() => {
+      if (Math.random() < 0.5) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    }, 500);
+  });
+
+  if (!check) {
+    return ACCOUNT_FIELD_EXISTING_ERROR;
+  }
+
+  return true;
+};

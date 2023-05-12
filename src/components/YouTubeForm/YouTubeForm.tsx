@@ -21,6 +21,7 @@ import {
   validateSocial,
   renderPetField,
   onSubmitError,
+  validateAccount,
 } from "./YoutubeForm.helpers";
 
 // Constants
@@ -110,7 +111,6 @@ export const YouTubeForm: FC = () => {
           label="Username"
           isRequired
           style={{ color: watchUserName === "Batman" ? "#315efb" : "black" }}
-          disabled
         />
 
         <Input
@@ -138,9 +138,16 @@ export const YouTubeForm: FC = () => {
 
         {petFields.map(renderPetField(append, remove))}
 
-        <Input name="age" label="Age" type="number" isRequired />
+        <Input name="age" label="Age" type="number" />
 
         <Input name="dob" label="DOB" type="date" />
+
+        <Input
+          name="account"
+          label="Account"
+          isRequired
+          validate={validateAccount}
+        />
 
         <button
           disabled={isSubmitting || !isDirty}

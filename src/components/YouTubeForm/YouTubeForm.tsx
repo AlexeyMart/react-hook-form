@@ -4,6 +4,7 @@ import { DevTool } from "@hookform/devtools";
 
 // Components
 import { Input } from "../form-elements/Input/Input";
+import { Loader } from "../Loader/Loader";
 // import { Test } from "./Test";
 
 // Styles
@@ -144,6 +145,8 @@ export const YouTubeForm: FC = () => {
       </form>
 
       <DevTool control={control} />
+
+      {isSubmitting && <Loader className="YoutubeForm__loader" />}
 
       {/* <Test control={control} /> */}
     </FormProvider>

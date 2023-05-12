@@ -1,3 +1,13 @@
+@keyframes SpinLoader {
+  0% {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 .YoutubeForm {
   display: flex;
   flex-direction: column;
@@ -17,4 +27,13 @@
 
 .YoutubeForm__submit-button {
   margin-top: 50px;
+}
+
+.YoutubeForm__loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 300px;
+  animation: SpinLoader 2s ease-in-out infinite both;
 }

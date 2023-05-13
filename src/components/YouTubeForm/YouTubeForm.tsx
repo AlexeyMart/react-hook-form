@@ -1,4 +1,4 @@
-import { FC, useEffect, ChangeEvent } from "react";
+import { FC, useEffect } from "react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
@@ -21,12 +21,13 @@ import {
   validateSocial,
   renderPetField,
   onSubmitError,
-  debouncedCheckAndValidateAccount,
-  checkAndValidateAccount,
 } from "./YoutubeForm.helpers";
 
 // Constants
 import { defaultValues } from "./YoutubeForm.constants";
+
+// Hooks
+import { useAccountValidation } from "../../hooks/useAccountValidation";
 
 export const YouTubeForm: FC = () => {
   const form = useForm<YouTubeFormValues>({
@@ -45,6 +46,7 @@ export const YouTubeForm: FC = () => {
     reset,
     setError,
     clearErrors,
+    setFocus,
   } = form;
 
   const {
@@ -80,24 +82,14 @@ export const YouTubeForm: FC = () => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  useEffect(() => {
-    if (!touchedFields.account) {
-      return;
-    }
-
-    debouncedCheckAndValidateAccount({
-      value: accountValue,
+  const { onChange: handleAccountChange, checkAndValidateAccount } =
+    useAccountValidation({
+      clearErrors,
       setError,
+      setValue,
+      value: accountValue,
+      touched: !!touchedFields.account,
     });
-  }, [accountValue, setError, touchedFields]);
-
-  const handleAccountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    clearErrors("account");
-    setValue("account", event.target.value, {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  };
 
   const {
     fields: petFields,
@@ -129,10 +121,10 @@ export const YouTubeForm: FC = () => {
   };
 
   const onSubmit = async (data: YouTubeFormValues) => {
-    const isAccountValid = await checkAndValidateAccount({
-      value: data.account,
-      setError,
-    });
+    const isAccountValid = await checkAndValidateAccount(
+      data.account,
+      setError
+    );
 
     if (!isAccountValid) {
       return;
@@ -148,6 +140,8 @@ export const YouTubeForm: FC = () => {
       }, 1500);
     });
   };
+
+  console.log("errors :>> ", errors);
 
   return (
     <FormProvider {...form}>

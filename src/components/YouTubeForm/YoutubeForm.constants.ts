@@ -10,6 +10,8 @@ export const SOCIAL_FIELD_ERROR = "Fill at least one social";
 
 export const ACCOUNT_FIELD_EXISTING_ERROR = "Account is already exist";
 
+export const DEFAULT_ERROR = "something went wrong";
+
 export const emailRegExp =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

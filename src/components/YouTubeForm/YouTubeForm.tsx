@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, ChangeEvent } from "react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
@@ -16,12 +16,13 @@ import { YouTubeFormValues } from "./YoutubeForm.types";
 // Helpers
 import {
   customValidationEmailFn,
-  onSubmit,
+  _onSubmit,
   getDefaultValues,
   validateSocial,
   renderPetField,
   onSubmitError,
-  validateAccount,
+  debouncedCheckAndValidateAccount,
+  checkAndValidateAccount,
 } from "./YoutubeForm.helpers";
 
 // Constants
@@ -42,9 +43,23 @@ export const YouTubeForm: FC = () => {
     getValues,
     setValue,
     reset,
+    setError,
+    clearErrors,
   } = form;
 
-  const { isSubmitting, isDirty, isSubmitSuccessful } = formState;
+  const {
+    isSubmitting,
+    isDirty,
+    isSubmitSuccessful,
+    errors,
+    isValid,
+    touchedFields,
+  } = formState;
+
+  // WATCHES
+  // const watchFormValues = watch(); // for all form values, always trigger rerender
+  const watchUserName = watch("username"); // trigger rerender always on username changes
+  const accountValue = watch("account");
 
   // example how to track and manipulate form values
   useEffect(() => {
@@ -64,6 +79,25 @@ export const YouTubeForm: FC = () => {
       reset();
     }
   }, [isSubmitSuccessful, reset]);
+
+  useEffect(() => {
+    if (!touchedFields.account) {
+      return;
+    }
+
+    debouncedCheckAndValidateAccount({
+      value: accountValue,
+      setError,
+    });
+  }, [accountValue, setError, touchedFields]);
+
+  const handleAccountChange = (event: ChangeEvent<HTMLInputElement>) => {
+    clearErrors("account");
+    setValue("account", event.target.value, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
 
   const {
     fields: petFields,
@@ -94,8 +128,26 @@ export const YouTubeForm: FC = () => {
     });
   };
 
-  // const watchFormValues = watch(); // for all form values, always trigger rerender
-  const watchUserName = watch("username"); // trigger rerender always on username changes
+  const onSubmit = async (data: YouTubeFormValues) => {
+    const isAccountValid = await checkAndValidateAccount({
+      value: data.account,
+      setError,
+    });
+
+    if (!isAccountValid) {
+      return;
+    }
+
+    console.log("isAccountValid :>> ", isAccountValid);
+
+    console.log("submitting... :>> ", data);
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1500);
+    });
+  };
 
   return (
     <FormProvider {...form}>
@@ -142,12 +194,7 @@ export const YouTubeForm: FC = () => {
 
         <Input name="dob" label="DOB" type="date" />
 
-        <Input
-          name="account"
-          label="Account"
-          isRequired
-          validate={validateAccount}
-        />
+        <Input name="account" label="Account" onChange={handleAccountChange} />
 
         <button
           disabled={isSubmitting || !isDirty}
@@ -172,7 +219,7 @@ export const YouTubeForm: FC = () => {
 
       <DevTool control={control} />
 
-      {isSubmitting && <Loader className="YoutubeForm__loader" />}
+      {isSubmitting && isValid && <Loader className="YoutubeForm__loader" />}
 
       {/* <Test control={control} /> */}
     </FormProvider>

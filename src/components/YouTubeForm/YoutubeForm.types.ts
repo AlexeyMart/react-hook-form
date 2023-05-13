@@ -1,3 +1,5 @@
+import { UseFormSetError } from "react-hook-form";
+
 export interface Pet {
   name: string;
   kind: string;
@@ -19,4 +21,9 @@ export interface YouTubeFormValues {
   age: number;
   dob: Date;
   account: string;
+}
+
+export interface CheckAccountParams {
+  value: string;
+  setError: UseFormSetError<YouTubeFormValues>;
 }

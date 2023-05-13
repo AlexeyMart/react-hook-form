@@ -4,6 +4,7 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from "react-hook-form";
+import debounce from "lodash.debounce";
 import { Input } from "../form-elements/Input/Input";
 import {
   defaultValues,
@@ -11,10 +12,16 @@ import {
   SOCIAL_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
   ACCOUNT_FIELD_EXISTING_ERROR,
+  DEFAULT_ERROR,
 } from "./YoutubeForm.constants";
-import { Pet, PetWithId, YouTubeFormValues } from "./YoutubeForm.types";
+import {
+  CheckAccountParams,
+  Pet,
+  PetWithId,
+  YouTubeFormValues,
+} from "./YoutubeForm.types";
 
-export const onSubmit = async (data: YouTubeFormValues) => {
+export const _onSubmit = async (data: YouTubeFormValues) => {
   console.log("submitting :>> ", data);
 
   await new Promise((resolve) => {
@@ -127,22 +134,37 @@ export const renderPetField =
     );
   };
 
-export const validateAccount = async (fieldValue: string) => {
-  console.log("fieldValue :>> ", fieldValue);
+export const checkAndValidateAccount = async ({
+  value,
+  setError,
+}: CheckAccountParams): Promise<boolean> => {
+  let isValid: boolean = false;
 
-  const check = await new Promise((resolve) => {
-    setTimeout(() => {
-      if (Math.random() < 0.5) {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
-    }, 500);
-  });
-
-  if (!check) {
-    return ACCOUNT_FIELD_EXISTING_ERROR;
+  if (!value) {
+    setError("account", { message: REQUIRED_FIELD_ERROR });
+    return isValid;
   }
 
-  return true;
+  try {
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 500);
+    });
+
+    if (value !== "free") {
+      setError("account", { message: ACCOUNT_FIELD_EXISTING_ERROR });
+    } else {
+      isValid = true;
+    }
+  } catch (error) {
+    setError("account", { message: DEFAULT_ERROR });
+  }
+
+  return isValid;
 };
+
+export const debouncedCheckAndValidateAccount = debounce(
+  checkAndValidateAccount,
+  500
+);

@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  justify-content: center;
+  column-gap: 30px;
+  row-gap: 20px;
+  flex-wrap: wrap;
+  margin: 0 auto 50px;
+}
+
+.header_link {
+  font-size: 20px;
+  color: var(--primary-color-blue);
+  text-decoration: none;
+}
+
+.header_link:hover {
+  color: var(--primary-color-blue-hover);
+}
+
+.header .active {
+  font-weight: 800;
+  text-decoration: underline;
+}

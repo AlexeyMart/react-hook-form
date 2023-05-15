@@ -1,0 +1,9 @@
+.YupForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.YupForm__submit-button {
+  margin-top: 50px;
+}

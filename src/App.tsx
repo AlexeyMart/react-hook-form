@@ -1,11 +1,20 @@
-import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import { AppRoutes } from "./constants";
 import { YouTubeForm } from "./components/YouTubeForm/YouTubeForm";
+import { YupForm } from "./components/YupForm/YupForm";
+import { Layout } from "./components/Layout/Layout";
 
 function App() {
   return (
-    <div className="App">
-      <YouTubeForm />
-    </div>
+    <Routes>
+      <Route path={AppRoutes.Main} element={<Layout />}>
+        <Route index element={<YouTubeForm />} />
+
+        <Route path={AppRoutes.Form} element={<YouTubeForm />} />
+
+        <Route path={AppRoutes.YupForm} element={<YupForm />} />
+      </Route>
+    </Routes>
   );
 }
 

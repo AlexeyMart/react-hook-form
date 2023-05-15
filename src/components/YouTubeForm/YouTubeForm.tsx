@@ -32,6 +32,7 @@ import { useAccountValidation } from "../../hooks/useAccountValidation";
 export const YouTubeForm: FC = () => {
   const form = useForm<YouTubeFormValues>({
     defaultValues,
+    mode: "all", // all = 'onBlur' + 'onChange', variants: 'onSubmit' (default) | 'onBlur' | 'onTouched' | 'onChange' | 'all'
     // ALSO able to fetch some data and init defaultValues
     // defaultValues: getDefaultValues,
   });
@@ -140,8 +141,6 @@ export const YouTubeForm: FC = () => {
       }, 1500);
     });
   };
-
-  console.log("errors :>> ", errors);
 
   return (
     <FormProvider {...form}>

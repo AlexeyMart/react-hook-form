@@ -1,7 +1,7 @@
 import { YupFormValues } from "./YupForm.types";
 
 export const defaultValues: YupFormValues = {
-  username: "Batman",
+  username: "",
   email: "",
   channel: "",
   social: {

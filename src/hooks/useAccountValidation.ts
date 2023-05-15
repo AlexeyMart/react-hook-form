@@ -10,7 +10,7 @@ import {
   ACCOUNT_FIELD_EXISTING_ERROR,
   DEFAULT_ERROR,
   REQUIRED_FIELD_ERROR,
-} from "../components/YouTubeForm/YoutubeForm.constants";
+} from "../constants";
 
 interface UseAccountValidationParams {
   touched: boolean;

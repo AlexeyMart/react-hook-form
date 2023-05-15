@@ -4,7 +4,7 @@ import {
   EMAIL_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
   emailRegExp,
-} from "../../YouTubeForm/YoutubeForm.constants";
+} from "../../../constants";
 import { getByPathInObj } from "../../YouTubeForm/YoutubeForm.helpers";
 
 interface Props extends ComponentProps<"input"> {

@@ -1,11 +1,11 @@
 import { FieldErrors, SubmitErrorHandler } from "react-hook-form";
 import { Input } from "../form-elements/Input/Input";
+import { defaultValues } from "./YoutubeForm.constants";
 import {
-  defaultValues,
   EMAIL_FIELD_ADMIN_ERROR,
   SOCIAL_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
-} from "./YoutubeForm.constants";
+} from "../../constants";
 import {
   Pet,
   PetWithId,

@@ -1,12 +1,10 @@
 import { FC } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import "./YupForm.css";
 
 // Components
 import { Input } from "../form-elements/Input/Input";
-
-// Styles
-import "./YupForm.css";
 
 // Types
 import { YupFormValues } from "./YupForm.types";
@@ -14,14 +12,18 @@ import { YupFormValues } from "./YupForm.types";
 // Constants
 import { defaultValues } from "./YupForm.constants";
 
+// Validation
+import { resolver } from "./YupForm.helpers";
+
 export const YupForm: FC = () => {
   const form = useForm<YupFormValues>({
     defaultValues,
+    resolver,
   });
 
   const { control, handleSubmit, formState } = form;
 
-  const { isSubmitting, isDirty } = formState;
+  const { isSubmitting } = formState;
 
   const onSubmit = async (data: YupFormValues) => {
     console.log("submitting... :>> ", data);
@@ -47,7 +49,7 @@ export const YupForm: FC = () => {
         <Input name="social.twitter" label="Twitter" />
 
         <button
-          disabled={isSubmitting || !isDirty}
+          disabled={isSubmitting}
           type="submit"
           className="YupForm__submit-button"
         >

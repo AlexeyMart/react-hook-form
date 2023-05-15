@@ -17,8 +17,9 @@ export const emailRegExp =
 
 export const defaultValues: YouTubeFormValues = {
   username: "Batman",
-  email: "example@example.com",
-  channel: "Some Channel",
+  // email: "example@example.com",
+  email: "",
+  channel: "",
   social: {
     facebook: "fb",
     twitter: "",

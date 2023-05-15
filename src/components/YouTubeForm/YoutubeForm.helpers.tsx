@@ -1,9 +1,4 @@
-import {
-  FieldErrors,
-  SubmitErrorHandler,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
-} from "react-hook-form";
+import { FieldErrors, SubmitErrorHandler } from "react-hook-form";
 import { Input } from "../form-elements/Input/Input";
 import {
   defaultValues,
@@ -11,7 +6,13 @@ import {
   SOCIAL_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
 } from "./YoutubeForm.constants";
-import { Pet, PetWithId, YouTubeFormValues } from "./YoutubeForm.types";
+import {
+  Pet,
+  PetWithId,
+  RenderPetFieldParams,
+  YouTubeFormValues,
+} from "./YoutubeForm.types";
+import { ChangeEvent } from "react";
 
 export const _onSubmit = async (data: YouTubeFormValues) => {
   console.log("submitting :>> ", data);
@@ -62,7 +63,7 @@ export const validateSocial = (
   return SOCIAL_FIELD_ERROR;
 };
 
-export const getByPathInObj = (obj: Record<string, any>, path: string) =>
+export const getByPathInObj = (obj: Record<string, any>, path: string): any =>
   path.split(".").reduce((acc, item) => acc?.[item], obj);
 
 const validatePetField =
@@ -81,11 +82,37 @@ const validatePetField =
     return true;
   };
 
+const handleChangePetField =
+  ({
+    setValue,
+    type,
+    trigger,
+    index,
+  }: Pick<RenderPetFieldParams, "setValue" | "trigger"> & {
+    type: keyof Pet;
+    index: number;
+  }) =>
+  (event: ChangeEvent<HTMLInputElement>) => {
+    if (type === "kind") {
+      setValue(`pets.${index}.kind`, event.target.value, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+      trigger(`pets.${index}.name`);
+      return;
+    }
+
+    setValue(`pets.${index}.name`, event.target.value, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+    trigger(`pets.${index}.kind`);
+  };
+
 export const renderPetField =
-  (
-    append: UseFieldArrayAppend<YouTubeFormValues, "pets">,
-    remove: UseFieldArrayRemove
-  ) =>
+  ({ append, remove, setValue, trigger }: RenderPetFieldParams) =>
   (
     // id автоматически генерируется react-hook-form
     { id, kind, name }: PetWithId,
@@ -102,12 +129,24 @@ export const renderPetField =
             name={`pets.${index}.kind`}
             label={`Pet ${index + 1} kind`}
             validate={validatePetField("kind", index)}
+            onChange={handleChangePetField({
+              index,
+              setValue,
+              trigger,
+              type: "kind",
+            })}
           />
 
           <Input
             name={`pets.${index}.name`}
             label={`Pet ${index + 1} name`}
             validate={validatePetField("name", index)}
+            onChange={handleChangePetField({
+              index,
+              setValue,
+              trigger,
+              type: "name",
+            })}
           />
         </div>
 

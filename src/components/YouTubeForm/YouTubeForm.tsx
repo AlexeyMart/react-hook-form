@@ -32,7 +32,7 @@ import { useAccountValidation } from "../../hooks/useAccountValidation";
 export const YouTubeForm: FC = () => {
   const form = useForm<YouTubeFormValues>({
     defaultValues,
-    mode: "all", // all = 'onBlur' + 'onChange', variants: 'onSubmit' (default) | 'onBlur' | 'onTouched' | 'onChange' | 'all'
+    mode: "onSubmit", // all = 'onBlur' + 'onChange', variants: 'onSubmit' (default) | 'onBlur' | 'onTouched' | 'onChange' | 'all'
     // ALSO able to fetch some data and init defaultValues
     // defaultValues: getDefaultValues,
   });
@@ -47,7 +47,7 @@ export const YouTubeForm: FC = () => {
     reset,
     setError,
     clearErrors,
-    setFocus,
+    trigger,
   } = form;
 
   const {
@@ -181,7 +181,7 @@ export const YouTubeForm: FC = () => {
           disabled={watch("social.facebook") !== ""}
         />
 
-        {petFields.map(renderPetField(append, remove))}
+        {petFields.map(renderPetField({ append, remove, setValue, trigger }))}
 
         <Input name="age" label="Age" type="number" />
 
@@ -207,6 +207,10 @@ export const YouTubeForm: FC = () => {
 
         <button onClick={() => reset()} type="button">
           Reset form
+        </button>
+
+        <button onClick={() => trigger()} type="button">
+          Validate Form
         </button>
       </form>
 
